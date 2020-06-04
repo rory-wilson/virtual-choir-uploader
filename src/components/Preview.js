@@ -18,7 +18,7 @@ export default ({ name, track, onCancel, onSubmit, onError }) => {
             data: track.blob
         }, function (buffer, view) {
             const wav = new Blob([view], { type: 'audio/wav' });
-            const dbx = new Dropbox({ accessToken: '-pi03oEGQXMAAAAAAAAf2jL9Mk9k_R-YSKDLtpJbH6SqKAaT11rDypF4Zg-9kVsn', fetch: fetch });
+            const dbx = new Dropbox({ accessToken: 'ACCESS TOKEN', fetch: fetch });
             dbx.filesUpload({ path: `/${'foo'.replace(/ /g, "_")}.wav`, contents: wav }).then(() => {
                 onSubmit();
             }).catch(() =>

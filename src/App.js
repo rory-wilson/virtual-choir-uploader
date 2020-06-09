@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
+import queryString from 'query-string';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
 
 import { Container, Row, Col, Card } from 'react-bootstrap';
-import Intro from './components/Intro';
-import PersonalDetails from './components/PersonalDetails';
-import Complete from './components/Complete';
-import Preview from './components/Preview';
-import Recorder from './components/Recorder';
-import Error from './components/Error';
+import { Intro, PersonalDetails, Test, Complete, Preview, Record, Error, NotFound } from './views';
 import './App.css';
 
 function App() {
-  const [state, setState] = useState('record');
-  const [track, setTrack] = useState();
+  const [track, setTrack] = useState(null);
   const [name, setName] = useState("");
+  //  const qs = queryString.parse(window.location.search);
+  //  console.log(qs)
 
   return (
     <div className="App">
@@ -21,22 +24,32 @@ function App() {
           <Col xs lg="8">
             <Card>
               <Card.Body>
-                {state === 'start' && <Intro onClick={() => setState('details')} />}
-                {state === 'details' && <PersonalDetails onClick={(name) => {
-                  setName(name);
-                  setState('record')
-                }
-                } />}
-                {state === 'record' && <Recorder videoId="J1R5S-X9DEw" onRecorded={(recordedBlob) => {
-                  setTrack(recordedBlob);
-                  setState('preview');
-                }} />}
-                {state === 'preview' && <Preview name={name} track={track}
-                  onCancel={() => setState('record')}
-                  onSubmit={() => setState('done')}
-                  onError={() => setState('error')} />}
-                {state === 'done' && <Complete />}
-                {state === 'error' && <Error onClick={() => setState('record')} />}
+                <Router>
+                  <Switch>
+                    <Route exact path="/">
+                      <Intro />
+                    </Route>
+                    <Route path="/test">
+                      <Test />
+                    </Route>
+                    <Route path="/details">
+                      <PersonalDetails onClick={(name) => setName(name)} />
+                    </Route>
+                    <Route path="/record">
+                      <Record videoId="J1R5S-X9DEw" onRecorded={(recordedBlob) => {
+                        setTrack(recordedBlob);
+                      }} /></Route>
+                    <Route path="/preview">
+                      <Preview name={name} track={track} /></Route>
+                    <Route path="/done">
+                      <Complete />
+                    </Route>
+                    <Route path="/error">
+                      <Error />
+                    </Route>
+                    <Route><NotFound /></Route>
+                  </Switch>
+                </Router>
               </Card.Body>
             </Card>
           </Col>

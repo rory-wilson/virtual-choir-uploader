@@ -13,6 +13,8 @@ export default ({ onClick }) => {
         to allow access to your microphone, click 'accept'.
     </p>
         <p>You can choose which microphone to use through your control panel or settings menu, under sounds.</p>
+        <p>If you are using Safari on an iPad or iPhone you may need to enable Media Recording.
+            Go to Settings -> Safari -> Advanced -> Experimental Features -> Media Recorder</p>
         <ReactMic
             record={recording}
             visualSetting="sinewave"

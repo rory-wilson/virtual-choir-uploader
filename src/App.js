@@ -36,7 +36,7 @@ function App() {
                       <PersonalDetails onClick={(name) => setName(name)} />
                     </Route>
                     <Route path="/record">
-                      <Record videoId="J1R5S-X9DEw" onRecorded={(recordedBlob) => {
+                      <Record videoId={process.env.REACT_APP_YOUTUBE_ID} onRecorded={(recordedBlob) => {
                         setTrack(recordedBlob);
                       }} /></Route>
                     <Route path="/preview">

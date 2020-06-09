@@ -62,9 +62,6 @@ export default ({ videoId, onRecorded }) => {
                     }}
                     strokeColor="#FF7043"
                     backgroundColor="#fff"
-                    mimeType="audio/wav"
-                    channelCount={1}
-                    sampleRate={44100}
                 />
             </Col>
         </Row>

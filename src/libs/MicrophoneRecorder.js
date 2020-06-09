@@ -4,7 +4,6 @@ let analyser
 let audioCtx
 let mediaRecorder
 let chunks = []
-let recordingLength = 0
 let startTime
 let stream
 let mediaOptions
@@ -47,7 +46,7 @@ export class MicrophoneRecorder {
 
   startRecording = () => {
     startTime = Date.now()
-    recordingLength = 0
+
     if (mediaRecorder) {
       if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume()
@@ -65,8 +64,6 @@ export class MicrophoneRecorder {
         if (onStartCallback) { onStartCallback() }
       }
     } else if (navigator.mediaDevices) {
-      console.log('getUserMedia supported.')
-
       navigator.mediaDevices.getUserMedia(constraints)
         .then((str) => {
           stream = str
@@ -113,14 +110,13 @@ export class MicrophoneRecorder {
   }
 
   onStop() {
-    recordingLength = chunks.length * 4096
+
     const blob = new Blob(chunks, { type: mediaOptions.mimeType })
     chunks = []
 
     const blobObject = {
       blob,
       startTime,
-      recordingLength,
       stopTime: Date.now(),
       options: mediaOptions,
       blobURL: window.URL.createObjectURL(blob)

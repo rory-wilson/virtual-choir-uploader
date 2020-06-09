@@ -18,8 +18,9 @@ export default ({ onClick }) => {
             visualSetting="sinewave"
             strokeColor="#FF7043"
             backgroundColor="#fff"
+            mimeType="audio/wav"
         />
-        <Button onClick={() => setRecording(!recording)} block size="lg" variant="outline-warning">{buttonText}</Button>
+        <Button onClick={() => setRecording(!recording)} block size="lg" variant="outline-info">{buttonText}</Button>
         <Link to="/details" className="btn btn-outline-danger btn-block btn-lg">I'm ready to record</Link>
     </section>);
 }

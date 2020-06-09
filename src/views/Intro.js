@@ -11,5 +11,5 @@ export default () => <section>
         to then click 'Upload' to send it.</p>
     <p>If you pause the video it will pause your recording.</p>
     <Link to="/details" className="btn btn-outline-danger btn-block btn-lg">Start</Link>
-    <Link to="/test" className="btn btn-outline-warning btn-block btn-lg">I want to test my settings first</Link>
+    <Link to="/test" className="btn btn-outline-info btn-block btn-lg">I want to test my settings first</Link>
 </section>

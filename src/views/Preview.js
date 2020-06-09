@@ -5,7 +5,6 @@ import { Link, useHistory } from "react-router-dom";
 
 import fetch from 'isomorphic-fetch';
 import { Dropbox } from 'dropbox'
-import { exportWav } from '../libs/Export';
 
 export default ({ name, track }) => {
     const history = useHistory();
@@ -13,20 +12,14 @@ export default ({ name, track }) => {
 
     const upload = () => {
         setUploading(true);
-
-        exportWav({
-            sampleRate: 44100,
-            recordingLength: track.recordingLength,
-            data: track.blob
-        }, function (buffer, view) {
-            const wav = new Blob([view], { type: 'audio/wav' });
-            const dbx = new Dropbox({ accessToken: process.env.REACT_APP_TOKEN, fetch: fetch });
-            dbx.filesUpload({ path: `/${name.replace(/ /g, "_")}.wav`, contents: wav }).then(() => {
-                history.push('/done')
-            }).catch(() =>
-                history.push('/error')
-            );
-        });
+        var d = new Date();
+        const dbx = new Dropbox({ accessToken: process.env.REACT_APP_TOKEN, fetch: fetch });
+        const path = `/${process.env.REACT_APP_YOUTUBE_ID}/${name.replace(/ /g, "_")}_${d.getTime()}.webm`;
+        dbx.filesUpload({ path, contents: track.blob }).then(() => {
+            history.push('/done')
+        }).catch(() =>
+            history.push('/error')
+        );
     }
 
     const title = uploading ? 'Uploading, please wait' : 'Check your recording';
@@ -44,7 +37,7 @@ export default ({ name, track }) => {
             <div className="mt-5 mb-5">
                 <ReactPlayer url={track.blobURL} controls height={50} width="100%" />
             </div>
-            <Link to="/record" className="btn btn-outline-warning btn-block btn-lg">I want to record again</Link>
+            <Link to="/record" className="btn btn-outline-info btn-block btn-lg">I want to record again</Link>
 
             <Button onClick={upload} block size="lg" variant="outline-danger">I'm happy to upload</Button>
         </>}

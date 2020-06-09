@@ -68,7 +68,7 @@ export class MicrophoneRecorder {
         .then((str) => {
           stream = str
 
-          if (MediaRecorder.isTypeSupported(mediaOptions.mimeType)) {
+          if (MediaRecorder.isTypeSupported != undefined && MediaRecorder.isTypeSupported(mediaOptions.mimeType)) {
             mediaRecorder = new MediaRecorder(str, mediaOptions)
           } else {
             mediaRecorder = new MediaRecorder(str)

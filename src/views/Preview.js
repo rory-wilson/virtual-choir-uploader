@@ -23,7 +23,7 @@ export default ({ name, track }) => {
     }
 
     const play = () => {
-        const ctx = new AudioContext();
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const fileReader = new FileReader();
         fileReader.onload = e => ctx.decodeAudioData(fileReader.result)
             .then(buf => {
@@ -56,7 +56,7 @@ export default ({ name, track }) => {
     }
 
     function initAudio() {
-        const ctx = new AudioContext();
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const fileReader = new FileReader();
         fileReader.onload = e => ctx.decodeAudioData(fileReader.result)
             .then(buffer => {

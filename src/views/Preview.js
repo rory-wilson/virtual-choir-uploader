@@ -25,13 +25,12 @@ export default ({ name, track }) => {
     const play = () => {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const fileReader = new FileReader();
-        fileReader.onload = e => ctx.decodeAudioData(fileReader.result)
-            .then(buf => {
-                const source = ctx.createBufferSource();
-                source.buffer = buf;
-                source.connect(ctx.destination);
-                source.start(0);
-            });
+        fileReader.onload = e => ctx.decodeAudioData(fileReader.result, buf => {
+            const source = ctx.createBufferSource();
+            source.buffer = buf;
+            source.connect(ctx.destination);
+            source.start(0);
+        });
         fileReader.readAsArrayBuffer(track.blob);
     }
 
@@ -58,14 +57,13 @@ export default ({ name, track }) => {
     function initAudio() {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
         const fileReader = new FileReader();
-        fileReader.onload = e => ctx.decodeAudioData(fileReader.result)
-            .then(buffer => {
-                var canvas = document.getElementById("view1");
-                setDuration(moment("2015-01-01").startOf('day')
-                    .seconds(Math.round(buffer.duration))
-                    .format('mm:ss'));
-                drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffer);
-            });
+        fileReader.onload = e => ctx.decodeAudioData(fileReader.result, (buffer) => {
+            var canvas = document.getElementById("view1");
+            setDuration(moment("2015-01-01").startOf('day')
+                .seconds(Math.round(buffer.duration))
+                .format('mm:ss'));
+            drawBuffer(canvas.width, canvas.height, canvas.getContext('2d'), buffer);
+        });
         fileReader.readAsArrayBuffer(track.blob);
     }
 

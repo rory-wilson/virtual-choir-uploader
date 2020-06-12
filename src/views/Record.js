@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import YouTube from 'react-youtube';
 import { useHistory } from "react-router-dom";
 
@@ -10,17 +10,52 @@ export default ({ videoId, onRecorded }) => {
     const history = useHistory();
     const [state, setState] = useState({
         recording: false,
-        paused: true,
-        complete: false
+        paused: false
     });
-    const [video, setVideo] = useState(null);
+    const playerRef = useRef(null);
+
+    const toggleRecording = () => {
+        if (state.recording && state.paused) {
+            setState({
+                recording: true,
+                paused: false
+            })
+            playerRef.current.internalPlayer.playVideo();
+        }
+        else if (state.recording && !state.paused) {
+            setState({
+                recording: true,
+                paused: true
+            });
+            playerRef.current.internalPlayer.pauseVideo();
+        }
+        else if (!state.recording) {
+            setState({
+                recording: true,
+                paused: false
+            })
+        }
+    }
+
+    const startRecording = () => {
+        playerRef.current.internalPlayer.seekTo(0);
+        playerRef.current.internalPlayer.playVideo();
+    }
+
+    const endRecording = () => {
+        setState({
+            recording: false,
+            paused: false
+        });
+    }
 
     return (<section>
         <h1>Record</h1>
-        <p>Press play to start</p>
+        <p>You can watch the video in full before recording by pressing play on the video.</p>
+        <p>Press the 'start recording' button to start. You maybe asked to allow access to your microphone.</p>
         <YouTube
             videoId={videoId}
-            onReady={(evt) => setVideo(evt.target)}
+            ref={playerRef}
             containerClassName="youtubeContainer"
             opts={{
                 height: '390',
@@ -29,26 +64,7 @@ export default ({ videoId, onRecorded }) => {
                     controls: 0,
                 }
             }}
-            onPlay={() => {
-                setState({
-                    recording: true,
-                    paused: false,
-                    complete: false
-                })
-            }
-            }
-            onPause={() => setState({
-                recording: true,
-                paused: true,
-                complete: false
-            })}
-            onEnd={() => {
-                setState({
-                    recording: false,
-                    paused: false,
-                    complete: true
-                });
-            }}
+            onEnd={endRecording}
         />
         <Row>
             <Col>
@@ -60,19 +76,19 @@ export default ({ videoId, onRecorded }) => {
                         onRecorded(recordedBlob);
                         history.push('/preview')
                     }}
+                    onStart={startRecording}
                     strokeColor="#FF7043"
                     backgroundColor="#fff"
                 />
             </Col>
         </Row>
-        {video &&
-            <Row>
-                <Button
-                    block
-                    variant="outline-danger"
-                    onClick={() => state.paused ? video.playVideo() : video.pauseVideo()}>
-                    {state.paused ? "Play" : "Pause"}
-                </Button>
-            </Row>}
-    </section>);
+        <Row>
+            <Button
+                block
+                variant="outline-danger"
+                onClick={toggleRecording}>
+                {!state.recording || state.paused ? "Start Recording" : "Pause Recording"}
+            </Button>
+        </Row>
+    </section >);
 }

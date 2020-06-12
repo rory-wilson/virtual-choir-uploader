@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import ReactPlayer from 'react-player'
 import { Link, useHistory } from "react-router-dom";
 
 import fetch from 'isomorphic-fetch';
@@ -22,6 +21,19 @@ export default ({ name, track }) => {
         );
     }
 
+    const play = () => {
+        const ctx = new AudioContext();
+        const fileReader = new FileReader();
+        fileReader.onload = e => ctx.decodeAudioData(fileReader.result)
+            .then(buf => {
+                const source = ctx.createBufferSource();
+                source.buffer = buf;
+                source.connect(ctx.destination);
+                source.start(0);
+            });
+        fileReader.readAsArrayBuffer(track.blob);
+    }
+
     const title = uploading ? 'Uploading, please wait' : 'Check your recording';
     const hint = uploading ? 'Please don\'t close your web browser until complete' : 'Please listen to your recording and check it\'s ok before submitting.';
 
@@ -35,7 +47,7 @@ export default ({ name, track }) => {
         </div>}
         {!uploading && <>
             <div className="mt-5 mb-5">
-                <ReactPlayer url={track.blobURL} controls height={50} width="100%" />
+                <Button block variant="success" onClick={() => play()}>Play</Button>
             </div>
             <Link to="/record" className="btn btn-outline-info btn-block btn-lg">I want to record again</Link>
 

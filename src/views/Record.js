@@ -62,6 +62,7 @@ export default ({ videoId, onRecorded }) => {
                 width: '640',
                 playerVars: {
                     controls: 0,
+                    playsinline: 1
                 }
             }}
             onEnd={endRecording}

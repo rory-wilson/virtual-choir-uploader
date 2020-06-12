@@ -10,6 +10,7 @@
     "dropbox": "^4.0.30",
     "isomorphic-fetch": "^2.2.1",
     "lamejs": "^1.2.0",
+    "moment": "^2.26.0",
     "query-string": "^6.13.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
